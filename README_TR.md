@@ -189,10 +189,5 @@ Bu proje Ticari Olmayan Lisans altında lisanslanmıştır - detaylar için [LIC
 ---
 
 <p align="center">
-  <a href="https://github.com/YOURUSERNAME">Your Name</a> tarafından yapıldı
+  ⭐ Yardımcı bulduysanız bu repo'yu yıldızlayın!
 </p>
-
-<p align="center">
-  Yardımcı bulduysanız bu repo'yu yıldızlayın!
-</p>
-
