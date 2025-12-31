@@ -25,22 +25,21 @@ conventional_commits = true
 filter_unconventional = true
 split_commits = false
 commit_parsers = [
-    { message = "^feat", group = "✨ Features" },
-    { message = "^fix", group = "🐛 Bug Fixes" },
-    { message = "^doc", group = "📝 Documentation" },
-    { message = "^perf", group = "⚡ Performance" },
-    { message = "^refactor", group = "♻️ Refactor" },
-    { message = "^style", group = "🎨 Style" },
-    { message = "^test", group = "🧪 Testing" },
+    { message = "^feat", group = "Features" },
+    { message = "^fix", group = "Bug Fixes" },
+    { message = "^doc", group = "Documentation" },
+    { message = "^perf", group = "Performance" },
+    { message = "^refactor", group = "Refactor" },
+    { message = "^style", group = "Style" },
+    { message = "^test", group = "Testing" },
     { message = "^chore\\(release\\)", skip = true },
-    { message = "^chore\\(deps\\)", group = "📦 Dependencies" },
+    { message = "^chore\\(deps\\)", group = "Dependencies" },
     { message = "^chore\\(pr\\)", skip = true },
     { message = "^chore\\(pull\\)", skip = true },
-    { message = "^chore", group = "🔧 Miscellaneous" },
-    { body = ".*security", group = "🔐 Security" },
+    { message = "^chore", group = "Miscellaneous" },
+    { body = ".*security", group = "Security" },
 ]
 protect_breaking_commits = false
 filter_commits = false
 topo_order = false
 sort_commits = "oldest"
-

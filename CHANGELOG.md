@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0] - 2024-12-31
 
-### ✨ Features
+### Features
 
 - **core:** Add app, API, and storage constants
 - **core:** Add custom exceptions and failure handling
@@ -22,14 +22,14 @@ All notable changes to this project will be documented in this file.
 - **shared:** Add primary button, text input, and card widgets
 - **i18n:** Add English and Spanish localizations
 
-### 📝 Documentation
+### Documentation
 
 - Add comprehensive README with badges and quick start guide
 - Add ARCHITECTURE.md with clean architecture documentation
 - Add CONTRIBUTING.md with coding standards and guidelines
-- Add MIT LICENSE
+- Add Non-Commercial LICENSE
 
-### 🔧 Configuration
+### Configuration
 
 - Add GitHub Actions CI/CD workflows (analyze, test, build)
 - Add release workflow with changelog generation
@@ -42,4 +42,3 @@ All notable changes to this project will be documented in this file.
 ## Future Roadmap
 
 See [ROADMAP.md](docs/ROADMAP.md) for planned features.
-

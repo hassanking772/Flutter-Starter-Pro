@@ -180,5 +180,4 @@ testWidgets('should display error message', (tester) async {
 
 Feel free to open an issue with the "question" label if you have any questions about contributing.
 
-Thank you for contributing! 🎉
-
+Thank you for contributing!
