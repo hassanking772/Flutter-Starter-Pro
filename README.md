@@ -1,3 +1,6 @@
+
+---
+
 <p align="center">
   <img src="assets/images/logo.png" alt="Flutter Starter Pro" width="120"/>
 </p>
@@ -16,7 +19,7 @@
     <img src="https://img.shields.io/badge/Dart-3.2+-0175C2?style=for-the-badge&logo=dart" alt="Dart"/>
   </a>
   <a href="LICENSE">
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"/>
+    <img src="https://img.shields.io/badge/License-Non--Commercial-blue?style=for-the-badge" alt="License"/>
   </a>
 </p>
 
@@ -27,24 +30,28 @@
   <a href="#customization">Customization</a> •
   <a href="#testing">Testing</a> •
   <a href="#contributing">Contributing</a>
+  <br /><br />
+  <strong>Language:</strong>
+  <a href="README.md">English</a> |
+  <a href="README_TR.md">Turkish</a>
 </p>
 
 ---
 
-## ✨ Features
+## Features
 
-- **🏗️ Clean Architecture** — Scalable, testable, maintainable code structure
-- **⚡ Riverpod 2.0** — Modern state management with code generation
-- **🧭 GoRouter** — Declarative routing with deep linking support
-- **🌐 Dio + Retrofit** — Type-safe API calls with interceptors
-- **🔐 Secure Storage** — Token management done right
-- **🎨 Theming System** — Light/Dark mode with Material 3
-- **🌍 Localization** — i18n ready with ARB files (English, Spanish)
-- **🧪 Testing Setup** — Unit, Widget, and Integration tests
-- **🚀 CI/CD Ready** — GitHub Actions workflows included
-- **📱 Responsive** — Adaptive layouts for all screen sizes
+- **Clean Architecture** — Scalable, testable, maintainable code structure
+- **Riverpod 2.0** — Modern state management with code generation
+- **GoRouter** — Declarative routing with deep linking support
+- **Dio API Client** — Type-safe API calls with interceptors
+- **Secure Storage** — Token management done right
+- **Theming System** — Light/Dark mode with Material 3
+- **Localization** — i18n ready with ARB files (English, Spanish)
+- **Testing Setup** — Unit, Widget, and Integration tests
+- **CI/CD Ready** — GitHub Actions workflows included
+- **Responsive** — Adaptive layouts for all screen sizes
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -77,7 +84,7 @@ Click **"Use this template"** button on GitHub, or:
 gh repo create my-app --template YOURUSERNAME/flutter-starter-pro
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 lib/
@@ -109,7 +116,7 @@ lib/
 
 [See full architecture documentation](docs/ARCHITECTURE.md)
 
-## 🎨 Customization
+## Customization
 
 ### Theme
 
@@ -136,7 +143,7 @@ static const String baseUrl = 'https://your-api.com/v1';
 
 [See full customization guide](docs/CUSTOMIZATION.md)
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run unit tests
@@ -152,7 +159,7 @@ flutter test integration_test
 genhtml coverage/lcov.info -o coverage/html
 ```
 
-## 📦 Build
+## Build
 
 ```bash
 # Android APK
@@ -168,7 +175,7 @@ flutter build ios --release
 flutter build web --release
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.
 
@@ -178,16 +185,16 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Non-Commercial License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/YOURUSERNAME">Your Name</a>
+  Made with by <a href="https://github.com/YOURUSERNAME">Your Name</a>
 </p>
 
 <p align="center">
-  ⭐ Star this repo if you found it helpful!
+  Star this repo if you found it helpful!
 </p>
