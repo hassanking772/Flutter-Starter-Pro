@@ -8,7 +8,7 @@ part of 'auth_provider.dart';
 
 String _$isAuthenticatedHash() => r'ac761310d7c2437ba714598d6ac3bf65cffd5542';
 
-/// Provider to check if user is authenticated
+/// Provider to check if user is authenticated.
 ///
 /// Copied from [isAuthenticated].
 @ProviderFor(isAuthenticated)
@@ -25,7 +25,7 @@ final isAuthenticatedProvider = AutoDisposeProvider<bool>.internal(
 typedef IsAuthenticatedRef = AutoDisposeProviderRef<bool>;
 String _$currentUserHash() => r'4f481a98b9c2e6ffc8fd3946145e9588f2450da3';
 
-/// Provider to get current user
+/// Provider to get current user.
 ///
 /// Copied from [currentUser].
 @ProviderFor(currentUser)
@@ -39,9 +39,9 @@ final currentUserProvider = AutoDisposeProvider<User?>.internal(
 );
 
 typedef CurrentUserRef = AutoDisposeProviderRef<User?>;
-String _$authNotifierHash() => r'0a78f3a33285375c4c900caada4eedcb949206e2';
+String _$authNotifierHash() => r'49bec6c5ab71cf69fd902fb7398348dd63bf66c0';
 
-/// Auth notifier for managing authentication state
+/// Auth notifier for managing authentication state using Clean Architecture.
 ///
 /// Copied from [AuthNotifier].
 @ProviderFor(AuthNotifier)

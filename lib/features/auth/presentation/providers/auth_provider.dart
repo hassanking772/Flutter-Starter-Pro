@@ -1,13 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_pro/core/router/app_router.dart';
-import 'package:flutter_starter_pro/core/storage/local_storage.dart';
-import 'package:flutter_starter_pro/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter_pro/core/di/injection_container.dart';
 import 'package:flutter_starter_pro/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter_pro/features/auth/domain/usecases/usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
 
-/// Auth state
+/// Authentication status enum.
 enum AuthStatus {
   initial,
   loading,
@@ -16,7 +15,7 @@ enum AuthStatus {
   error,
 }
 
-/// Auth state class
+/// Authentication state class.
 class AuthState {
   const AuthState({
     this.status = AuthStatus.initial,
@@ -45,7 +44,7 @@ class AuthState {
   bool get hasError => status == AuthStatus.error;
 }
 
-/// Auth notifier for managing authentication state
+/// Auth notifier for managing authentication state using Clean Architecture.
 @riverpod
 class AuthNotifier extends _$AuthNotifier {
   @override
@@ -58,18 +57,20 @@ class AuthNotifier extends _$AuthNotifier {
     state = state.copyWith(status: AuthStatus.loading);
 
     try {
-      final secureStorage = ref.read(secureStorageProvider);
-      final hasToken = await secureStorage.hasValidToken();
+      final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
+      final result = await getCurrentUser();
 
-      if (hasToken) {
-        // In a real app, you would fetch user data here
-        state = state.copyWith(
-          status: AuthStatus.authenticated,
-          user: const User(id: '1', email: 'user@example.com', name: 'Demo User'),
-        );
-      } else {
-        state = state.copyWith(status: AuthStatus.unauthenticated);
-      }
+      result.fold(
+        (failure) {
+          state = state.copyWith(status: AuthStatus.unauthenticated);
+        },
+        (user) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: user,
+          );
+        },
+      );
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -78,7 +79,7 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  /// Sign in with email and password
+  /// Sign in with email and password.
   Future<bool> signIn({
     required String email,
     required String password,
@@ -86,43 +87,27 @@ class AuthNotifier extends _$AuthNotifier {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
     try {
-      // Simulate API call
-      await Future<void>.delayed(const Duration(seconds: 1));
+      final signInUseCase = ref.read(signInUseCaseProvider);
+      final result = await signInUseCase(
+        SignInParams(email: email, password: password),
+      );
 
-      // In a real app, you would call your auth API here
-      // For demo purposes, we'll accept any valid email/password
-      if (email.isNotEmpty && password.length >= 6) {
-        final secureStorage = ref.read(secureStorageProvider);
-        await secureStorage.saveTokens(
-          accessToken: 'demo_access_token',
-          refreshToken: 'demo_refresh_token',
-          userId: '1',
-        );
-
-        // Save email if remember me is enabled
-        final localStorage = ref.read(localStorageInstanceProvider);
-        if (localStorage?.rememberMe ?? false) {
-          await localStorage?.setUserEmail(email);
-        }
-
-        state = state.copyWith(
-          status: AuthStatus.authenticated,
-          user: UserModel(
-            id: '1',
-            email: email,
-            name: 'Demo User',
-            isEmailVerified: true,
-          ),
-        );
-
-        return true;
-      } else {
-        state = state.copyWith(
-          status: AuthStatus.error,
-          errorMessage: 'Invalid email or password',
-        );
-        return false;
-      }
+      return result.fold(
+        (failure) {
+          state = state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: failure.message,
+          );
+          return false;
+        },
+        (user) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: user,
+          );
+          return true;
+        },
+      );
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
@@ -132,7 +117,7 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  /// Sign up with email and password
+  /// Sign up with name, email, and password.
   Future<bool> signUp({
     required String name,
     required String email,
@@ -141,28 +126,27 @@ class AuthNotifier extends _$AuthNotifier {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
     try {
-      // Simulate API call
-      await Future<void>.delayed(const Duration(seconds: 1));
-
-      // In a real app, you would call your auth API here
-      final secureStorage = ref.read(secureStorageProvider);
-      await secureStorage.saveTokens(
-        accessToken: 'demo_access_token',
-        refreshToken: 'demo_refresh_token',
-        userId: '1',
+      final signUpUseCase = ref.read(signUpUseCaseProvider);
+      final result = await signUpUseCase(
+        SignUpParams(name: name, email: email, password: password),
       );
 
-      state = state.copyWith(
-        status: AuthStatus.authenticated,
-        user: UserModel(
-          id: '1',
-          email: email,
-          name: name,
-          isEmailVerified: false,
-        ),
+      return result.fold(
+        (failure) {
+          state = state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: failure.message,
+          );
+          return false;
+        },
+        (user) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: user,
+          );
+          return true;
+        },
       );
-
-      return true;
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
@@ -172,15 +156,25 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  /// Sign out
+  /// Sign out the current user.
   Future<void> signOut() async {
     state = state.copyWith(status: AuthStatus.loading);
 
     try {
-      final secureStorage = ref.read(secureStorageProvider);
-      await secureStorage.clearTokens();
+      final signOutUseCase = ref.read(signOutUseCaseProvider);
+      final result = await signOutUseCase();
 
-      state = const AuthState(status: AuthStatus.unauthenticated);
+      result.fold(
+        (failure) {
+          state = state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: failure.message,
+          );
+        },
+        (_) {
+          state = const AuthState(status: AuthStatus.unauthenticated);
+        },
+      );
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
@@ -189,17 +183,29 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  /// Request password reset
+  /// Request password reset.
   Future<bool> requestPasswordReset(String email) async {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
     try {
-      // Simulate API call
-      await Future<void>.delayed(const Duration(seconds: 1));
+      final forgotPasswordUseCase = ref.read(forgotPasswordUseCaseProvider);
+      final result = await forgotPasswordUseCase(
+        ForgotPasswordParams(email: email),
+      );
 
-      // In a real app, you would call your auth API here
-      state = state.copyWith(status: AuthStatus.unauthenticated);
-      return true;
+      return result.fold(
+        (failure) {
+          state = state.copyWith(
+            status: AuthStatus.unauthenticated,
+            errorMessage: failure.message,
+          );
+          return false;
+        },
+        (_) {
+          state = state.copyWith(status: AuthStatus.unauthenticated);
+          return true;
+        },
+      );
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
@@ -209,23 +215,65 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  /// Clear error message
+  /// Update user profile.
+  Future<bool> updateProfile({
+    String? name,
+    String? phoneNumber,
+    String? avatarUrl,
+  }) async {
+    state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
+
+    try {
+      final updateUserUseCase = ref.read(updateUserUseCaseProvider);
+      final result = await updateUserUseCase(
+        UpdateUserParams(
+          name: name,
+          phoneNumber: phoneNumber,
+          avatarUrl: avatarUrl,
+        ),
+      );
+
+      return result.fold(
+        (failure) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            errorMessage: failure.message,
+          );
+          return false;
+        },
+        (user) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: user,
+          );
+          return true;
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.authenticated,
+        errorMessage: e.toString(),
+      );
+      return false;
+    }
+  }
+
+  /// Clear error message.
   void clearError() {
     state = state.copyWith(errorMessage: null);
   }
 }
 
-/// Provider to check if user is authenticated
+/// Provider to check if user is authenticated.
 @riverpod
 bool isAuthenticated(Ref ref) {
   final authState = ref.watch(authNotifierProvider);
   return authState.isAuthenticated;
 }
 
-/// Provider to get current user
+/// Provider to get current user.
 @riverpod
 User? currentUser(Ref ref) {
   final authState = ref.watch(authNotifierProvider);
   return authState.user;
 }
-
